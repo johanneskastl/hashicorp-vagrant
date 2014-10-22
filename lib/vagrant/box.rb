@@ -9,6 +9,7 @@ require "vagrant/util/downloader"
 require "vagrant/util/platform"
 require "vagrant/util/safe_chdir"
 require "vagrant/util/subprocess"
+require "vagrant/util/tempfile"
 
 module Vagrant
   # Represents a "box," which is a package Vagrant environment that is used
@@ -118,7 +119,7 @@ module Vagrant
     # @param [Hash] download_options Options to pass to the downloader.
     # @return [BoxMetadata]
     def load_metadata(**download_options)
-      tf = Tempfile.new("vagrant-load-metadata")
+      tf = Util::Tempfile.new("vagrant-load-metadata")
       tf.close
 
       url = @metadata_url

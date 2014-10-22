@@ -15,6 +15,8 @@ module Vagrant
     autoload :SafeExec,                  'vagrant/util/safe_exec'
     autoload :SilenceWarnings,           'vagrant/util/silence_warnings'
     autoload :StackedProcRunner,         'vagrant/util/stacked_proc_runner'
+    autoload :Tempfile,                  'vagrant/util/tempfile'
+    autoload :TemplateRenderer,          'vagrant/util/template_renderer'
     autoload :StringBlockEditor,         'vagrant/util/string_block_editor'
     autoload :Subprocess,                'vagrant/util/subprocess'
     autoload :TemplateRenderer,          'vagrant/util/template_renderer'
