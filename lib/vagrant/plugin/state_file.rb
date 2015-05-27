@@ -7,8 +7,9 @@ module Vagrant
     # This is a helper to deal with the plugin state file that Vagrant
     # uses to track what plugins are installed and activated and such.
     class StateFile
-      def initialize(path)
+      def initialize(path, system = false)
         @path = path
+        @system = system
 
         @data = {}
         if @path.exist?
@@ -24,6 +25,21 @@ module Vagrant
 
         @data["version"] ||= "1"
         @data["installed"] ||= {}
+        load_extra_plugins
+      end
+
+      def load_extra_plugins
+        extra_plugins = Dir.glob(@path.dirname.join('plugins.d', '*.json'))
+        extra_plugins.each do |filename|
+          json = File.read(filename)
+          begin
+            plugin_data = JSON.parse(json)
+            @data["installed"].merge!(plugin_data)
+          rescue JSON::ParserError => e
+            raise Vagrant::Errors::PluginStateFileParseError,
+              path: filename, message: e.message
+          end
+        end
       end
 
       # Add a plugin that is installed to the state file.
@@ -102,6 +118,10 @@ module Vagrant
           f.close
           FileUtils.mv(f.path, @path)
         end
+      rescue Errno::EACCES
+        # Ignore permission denied against system-installed plugins; regular
+        # users are not supposed to write there.
+        raise unless @system
       end
 
       protected

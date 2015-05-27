@@ -18,7 +18,7 @@ module Vagrant
 
       # Returns the path to the [StateFile] for system plugins.
       def self.system_plugins_file
-        dir = Vagrant.installer_embedded_dir
+        dir = '/usr/share/vagrant-plugins'
         return nil if !dir
         Pathname.new(dir).join("plugins.json")
       end
@@ -33,7 +33,7 @@ module Vagrant
 
         system_path  = self.class.system_plugins_file
         @system_file = nil
-        @system_file = StateFile.new(system_path) if system_path && system_path.file?
+        @system_file = StateFile.new(system_path, true) if system_path && system_path.file?
       end
 
       # Installs another plugin into our gem directory.
