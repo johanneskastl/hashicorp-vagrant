@@ -1,4 +1,4 @@
-require_relative "../../../../lib/vagrant/action/general/package"
+require "vagrant/action/general/package"
 
 module VagrantPlugins
   module ProviderVirtualBox
